@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tu Carro</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1600&q=80') no-repeat center center fixed;
+      background-size: cover;
+      transition: background-image 0.6s ease-in-out;
+    }
+
+    .overlay {
+      backdrop-filter: blur(6px);
+      background-color: rgba(255,255,255,0.05);
+      min-height: 100vh;
+    }
+
+    header {
+      background: rgba(44, 62, 80, 0.85);
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .card h2 {
+      color: #2c3e50;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .output {
+      background: #f0f8ff;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #2c3e50;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    button {
+      position: relative;
+      padding: 12px 20px;
+      background: linear-gradient(to right, #1abc9c, #16a085);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    button::before {
+      content: "";
+      position: absolute;
+      left: -75%;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      background: rgba(255,255,255,0.3);
+      transform: skewX(-20deg);
+      transition: left 0.4s ease;
+    }
+
+    button:hover::before {
+      left: 125%;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #fondo-selector {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay">
+  <header>
+    🚗 Tu Carro
+  </header>
+
+  <div class="container">
+
+    <div class="card">
+      <h2>Cambiar Fondo</h2>
+      <div id="fondo-selector">
+        <input type="text" id="fondoUrl" placeholder="Pega una URL de imagen">
+        <button onclick="cambiarFondo()">Aplicar Fondo</button>
+        <input type="file" id="fondoFile" accept="image/*" onchange="leerImagen(event)">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Información del Carro</h2>
+      <label>Marca:</label>
+      <input type="text" id="marca" value="Toyota">
+      <label>Modelo:</label>
+      <input type="text" id="modelo" value="Corolla 2022">
+      <label>Placa:</label>
+      <input type="text" id="placa" value="ABC-123">
+      <button onclick="actualizarInfo()">Guardar</button>
+      <div class="output" id="infoCarro">
+        Marca: Toyota<br>
+        Modelo: Corolla 2022<br>
+        Placa: ABC-123
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Peajes</h2>
+      <p>Consulta y paga tus peajes fácilmente.</p>
+      <button onclick="mostrarAccion('✅ Pago de peajes realizado con éxito.')">Pagar Peaje</button>
+    </div>
+
+    <div class="card">
+      <h2>Técnico Mecánica</h2>
+      <label>Última Revisión:</label>
+      <input type="date" id="ultimaRevision" value="2024-05-01">
+      <button onclick="guardarRevision()">Guardar Fecha</button>
+      <div class="output" id="revisionInfo">
+        Última revisión técnico-mecánica: 2024-05-01
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cambio de Llantas</h2>
+      <label>Último cambio:</label>
+      <input type="date" id="ultimoCambio" value="2024-02-12">
+      <button onclick="guardarCambio()">Guardar Fecha</button>
+      <div class="output" id="cambioInfo">
+        Último cambio de llantas: 2024-02-12
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Otros Servicios</h2>
+      <ul>
+        <li>🛠 Talleres cercanos</li>
+        <li>⛽ Gasolineras</li>
+        <li>📍 Ubicación del vehículo</li>
+        <li>📅 Recordatorios</li>
+      </ul>
+      <button onclick="mostrarAccion('📍 Mostrando servicios cercanos...')">Ver Servicios</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function actualizarInfo() {
+    const marca = document.getElementById('marca').value;
+    const modelo = document.getElementById('modelo').value;
+    const placa = document.getElementById('placa').value;
+
+    const info = `
+      Marca: ${marca}<br>
+      Modelo: ${modelo}<br>
+      Placa: ${placa}
+    `;
+    document.getElementById('infoCarro').innerHTML = info;
+  }
+
+  function guardarRevision() {
+    const fecha = document.getElementById('ultimaRevision').value;
+    document.getElementById('revisionInfo').innerHTML = `Última revisión técnico-mecánica: ${fecha}`;
+  }
+
+  function guardarCambio() {
+    const fecha = document.getElementById('ultimoCambio').value;
+    document.getElementById('cambioInfo').innerHTML = `Último cambio de llantas: ${fecha}`;
+  }
+
+  function mostrarAccion(mensaje) {
+    alert(mensaje);
+  }
+
+  function cambiarFondo() {
+    const url = document.getElementById('fondoUrl').value;
+    if (url) {
+      document.body.style.backgroundImage = `url('${url}')`;
+    }
+  }
+
+  function leerImagen(event) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.body.style.backgroundImage = `url('${e.target.result}')`;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
+
+</body>
+</html>
